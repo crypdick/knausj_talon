@@ -1,7 +1,7 @@
 import os
 
-from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
-from talon_plugins import eye_mouse, eye_zoom_mouse, speech
+from talon import Module, actions, app, clip, cron, ctrl, imgui, noise, ui
+from talon_plugins import eye_mouse, eye_zoom_mouse
 from talon_plugins.eye_mouse import config, toggle_camera_overlay, toggle_control
 
 key = actions.key
@@ -57,7 +57,8 @@ setting_mouse_wake_hides_cursor = mod.setting(
     "mouse_wake_hides_cursor",
     type=int,
     default=0,
-    desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
+    desc="When enabled, mouse wake will hide the cursor. mouse_wake enables  zoom "
+    "mouse.",
 )
 setting_mouse_hide_mouse_gui = mod.setting(
     "mouse_hide_mouse_gui",
@@ -75,7 +76,8 @@ setting_mouse_wheel_down_amount = mod.setting(
     "mouse_wheel_down_amount",
     type=int,
     default=120,
-    desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by default)",
+    desc="The amount to scroll up/down (equivalent to mouse wheel on Windows by "
+    "default)",
 )
 
 continuous_scoll_mode = ""
@@ -92,38 +94,54 @@ def gui_wheel(gui: imgui.GUI):
 @mod.action_class
 class Actions:
     def mouse_show_cursor():
-        """Shows the cursor"""
+        """
+        Shows the cursor.
+        """
         show_cursor_helper(True)
 
     def mouse_hide_cursor():
-        """Hides the cursor"""
+        """
+        Hides the cursor.
+        """
         show_cursor_helper(False)
 
     def mouse_wake():
-        """Enable control mouse, zoom mouse, and disables cursor"""
+        """
+        Enable control mouse, zoom mouse, and disables cursor.
+        """
         eye_zoom_mouse.toggle_zoom_mouse(True)
         # eye_mouse.control_mouse.enable()
         if setting_mouse_wake_hides_cursor.get() >= 1:
             show_cursor_helper(False)
 
     def mouse_calibrate():
-        """Start calibration"""
+        """
+        Start calibration.
+        """
         eye_mouse.calib_start()
 
     def mouse_toggle_control_mouse():
-        """Toggles control mouse"""
+        """
+        Toggles control mouse.
+        """
         toggle_control(not config.control_mouse)
 
     def mouse_toggle_camera_overlay():
-        """Toggles camera overlay"""
+        """
+        Toggles camera overlay.
+        """
         toggle_camera_overlay(not config.show_camera)
 
     def mouse_toggle_zoom_mouse():
-        """Toggles zoom mouse"""
+        """
+        Toggles zoom mouse.
+        """
         eye_zoom_mouse.toggle_zoom_mouse(not eye_zoom_mouse.zoom_mouse.enabled)
 
     def mouse_cancel_zoom_mouse():
-        """Cancel zoom mouse if pending"""
+        """
+        Cancel zoom mouse if pending.
+        """
         if (
             eye_zoom_mouse.zoom_mouse.enabled
             and eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE
@@ -131,12 +149,17 @@ class Actions:
             eye_zoom_mouse.zoom_mouse.cancel()
 
     def mouse_trigger_zoom_mouse():
-        """Trigger zoom mouse if enabled"""
+        """
+        Trigger zoom mouse if enabled.
+        """
         if eye_zoom_mouse.zoom_mouse.enabled:
             eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
 
     def mouse_drag():
-        """(TEMPORARY) Press and hold/release button 0 depending on state for dragging"""
+        """
+        (TEMPORARY) Press and hold/release button 0 depending on state for
+        dragging.
+        """
         if 1 not in ctrl.mouse_buttons_down():
             # print("start drag...")
             ctrl.mouse_click(button=0, down=True)
@@ -148,7 +171,9 @@ class Actions:
         # app.notify("drag stopped")
 
     def mouse_sleep():
-        """Disables control mouse, zoom mouse, and re-enables cursor"""
+        """
+        Disables control mouse, zoom mouse, and re-enables cursor.
+        """
         eye_zoom_mouse.toggle_zoom_mouse(False)
         toggle_control(False)
         show_cursor_helper(True)
@@ -157,11 +182,15 @@ class Actions:
             actions.user.mouse_drag()
 
     def mouse_scroll_down():
-        """Scrolls down"""
+        """
+        Scrolls down.
+        """
         mouse_scroll(setting_mouse_wheel_down_amount.get())()
 
     def mouse_scroll_down_continuous():
-        """Scrolls down continuously"""
+        """
+        Scrolls down continuously.
+        """
         global continuous_scoll_mode
         continuous_scoll_mode = "scroll down continuous"
         mouse_scroll(setting_mouse_continuous_scroll_amount.get())()
@@ -172,11 +201,15 @@ class Actions:
         gui_wheel.show()
 
     def mouse_scroll_up():
-        """Scrolls up"""
+        """
+        Scrolls up.
+        """
         mouse_scroll(-setting_mouse_wheel_down_amount.get())()
 
     def mouse_scroll_up_continuous():
-        """Scrolls up continuously"""
+        """
+        Scrolls up continuously.
+        """
         global continuous_scoll_mode
         continuous_scoll_mode = "scroll up continuous"
         mouse_scroll(-setting_mouse_continuous_scroll_amount.get())()
@@ -187,11 +220,15 @@ class Actions:
             gui_wheel.show()
 
     def mouse_scroll_stop():
-        """Stops scrolling"""
+        """
+        Stops scrolling.
+        """
         stop_scroll()
 
     def mouse_gaze_scroll():
-        """Starts gaze scroll"""
+        """
+        Starts gaze scroll.
+        """
         global continuous_scoll_mode
         continuous_scoll_mode = "gaze scroll"
         start_cursor_scrolling()
@@ -199,18 +236,24 @@ class Actions:
             gui_wheel.show()
 
     def copy_mouse_position():
-        """Copy the current mouse position coordinates"""
+        """
+        Copy the current mouse position coordinates.
+        """
         position = ctrl.mouse_pos()
         clip.set_text((repr(position)))
 
     def mouse_move_center_active_window():
-        """move the mouse cursor to the center of the currently active window"""
+        """
+        move the mouse cursor to the center of the currently active window.
+        """
         rect = ui.active_window().rect
         ctrl.mouse_move(rect.left + (rect.width / 2), rect.top + (rect.height / 2))
 
 
 def show_cursor_helper(show):
-    """Show/hide the cursor"""
+    """
+    Show/hide the cursor.
+    """
     if app.platform == "windows":
         import ctypes
         import winreg
@@ -245,7 +288,9 @@ def show_cursor_helper(show):
 
 
 def on_pop(active):
-    """Defines behavior for pop noises"""
+    """
+    Defines behavior for pop noises.
+    """
     if gaze_job or scroll_job:
         if setting_mouse_enable_pop_stops_scroll.get() >= 1:
             stop_scroll()
@@ -258,9 +303,16 @@ def on_pop(active):
 
 
 def on_hiss(active):
+    """
+    Presses and holds left mouse button while hissing.
+
+    Args:
+        active: Whether hiss is active
+    """
     ctrl.mouse_click(button=0, down=active, up=not active)
 
 
+# Registers the on_pop and on_hiss functions
 noise.register("pop", on_pop)
 noise.register("hiss", on_hiss)
 
@@ -289,7 +341,8 @@ def scroll_continuous_helper():
 def start_scroll():
     global scroll_job
     scroll_job = cron.interval("60ms", scroll_continuous_helper)
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
+    # if eye_zoom_mouse.zoom_mouse.enabled  and eye_mouse.mouse.attached_tracker is
+    # not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
 
 
@@ -337,7 +390,8 @@ def stop_scroll():
     gaze_job = None
     gui_wheel.hide()
 
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
+    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is
+    # not  None:
     #    eye_zoom_mouse.zoom_mouse.sleep(False)
 
 
@@ -345,5 +399,6 @@ def start_cursor_scrolling():
     global scroll_job, gaze_job
     stop_scroll()
     gaze_job = cron.interval("60ms", gaze_scroll)
-    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
+    # if eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is
+    # not None:
     #    eye_zoom_mouse.zoom_mouse.sleep(True)
