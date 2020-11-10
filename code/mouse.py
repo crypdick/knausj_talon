@@ -1,6 +1,4 @@
 import os
-import pathlib
-import subprocess
 
 from talon import Context, Module, actions, app, cron, ctrl, imgui, noise, settings, ui
 from talon_plugins import eye_mouse, eye_zoom_mouse, speech
@@ -258,7 +256,11 @@ def on_pop(active):
             ctrl.mouse_click(button=0, hold=16000)
 
 
+def on_hiss(active):
+    ctrl.mouse_click(button=0, down=active, up=not active)
+
 noise.register("pop", on_pop)
+noise.register("hiss", on_hiss)
 
 
 def mouse_scroll(amount):
