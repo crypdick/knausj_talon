@@ -41,10 +41,10 @@ mod = Module()
 mod.list(
     "mouse_button", desc="List of mouse button words to mouse_click index parameter"
 )
-setting_mouse_enable_pop_click = mod.setting(
-    "mouse_enable_pop_click",
+setting_mouse_enable_noise_control = mod.setting(
+    "mouse_enable_noise_control",
     type=int,
-    default=0,
+    default=1,
     desc="Enable pop to click when control mouse is enabled.",
 )
 setting_mouse_enable_pop_stops_scroll = mod.setting(
@@ -297,9 +297,9 @@ def on_pop(active):
     elif (
         not eye_zoom_mouse.zoom_mouse.enabled
         and eye_mouse.mouse.attached_tracker is not None
+        and setting_mouse_enable_noise_control.get() >= 1
     ):
-        if setting_mouse_enable_pop_click.get() >= 1:
-            ctrl.mouse_click(button=0, hold=16000)
+        ctrl.mouse_click(button=1, hold=16000)  # button=1 == right click
 
 
 def on_hiss(active):
@@ -309,7 +309,8 @@ def on_hiss(active):
     Args:
         active: Whether hiss is active
     """
-    ctrl.mouse_click(button=0, down=active, up=not active)
+    if setting_mouse_enable_noise_control.get() >= 1:
+        ctrl.mouse_click(button=0, down=active, up=not active)
 
 
 # Registers the on_pop and on_hiss functions
