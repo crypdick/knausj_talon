@@ -1,12 +1,13 @@
-from talon import app, Module, Context, actions, ui, imgui, settings, app
-from os.path import expanduser
-from subprocess import Popen
-from pathlib import Path
-from typing import List, Union
-import os
 import math
+import os
 import re
 from itertools import islice
+from os.path import expanduser
+from pathlib import Path
+from subprocess import Popen
+from typing import List, Union
+
+from talon import Context, Module, actions, app, imgui, settings, ui
 
 selection_numbers = [
     "one",

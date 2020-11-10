@@ -1,7 +1,7 @@
+import sys
 from typing import Set
 
-from talon import Module, Context, actions
-import sys
+from talon import Context, Module, actions
 
 default_alphabet = (
     "air beta cap delta each foxy geer hip ivy jeep cam look miner nafta otter peck quench rome scar "

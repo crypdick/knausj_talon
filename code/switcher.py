@@ -3,7 +3,7 @@ import re
 import time
 
 import talon
-from talon import Context, Module, imgui, ui, fs, actions
+from talon import Context, Module, actions, fs, imgui, ui
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`

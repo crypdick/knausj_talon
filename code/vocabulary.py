@@ -1,6 +1,6 @@
 from talon import Context, Module, actions, grammar
-from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
+from .user_settings import bind_list_to_csv, bind_word_map_to_csv
 
 # Default words that will need to be capitalized (particularly under w2l).
 _capitalize_defaults = [

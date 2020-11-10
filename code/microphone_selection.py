@@ -1,8 +1,6 @@
-from talon import actions
-from talon import Module, actions, imgui, scripting, app
-from talon.microphone import manager
+from talon import Module, actions, app, imgui, scripting
 from talon.lib import cubeb
-from talon import scripting
+from talon.microphone import manager
 
 ctx = cubeb.Context()
 mod = Module()

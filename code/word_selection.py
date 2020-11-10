@@ -1,6 +1,6 @@
 import time
 
-from talon import clip, Module, Context, actions
+from talon import Context, Module, actions, clip
 
 mod = Module()
 

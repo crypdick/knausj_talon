@@ -1,7 +1,8 @@
-from talon import Module, Context, actions, ui, imgui
-from talon.grammar import Phrase
-from typing import List, Union
 import re
+from typing import List, Union
+
+from talon import Context, Module, actions, imgui, ui
+from talon.grammar import Phrase
 
 ctx = Context()
 key = actions.key

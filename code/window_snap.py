@@ -11,7 +11,7 @@ import time
 from operator import xor
 from typing import Optional
 
-from talon import ui, Module, Context, actions
+from talon import Context, Module, actions, ui
 
 
 def sorted_screens():

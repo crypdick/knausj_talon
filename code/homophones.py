@@ -1,5 +1,6 @@
-from talon import Context, Module, app, clip, cron, imgui, actions, ui, fs
 import os
+
+from talon import Context, Module, actions, app, clip, cron, fs, imgui, ui
 
 ########################################################################
 # global settings

@@ -1,13 +1,13 @@
 # courtesy of https://github.com/timo/
 # see https://github.com/timo/talon_scripts
-from talon import Module, Context, app, canvas, screen, ui, ctrl, cron
-from talon.skia import Shader, Color, Rect
-from talon_plugins import eye_mouse, eye_zoom_mouse
+import math
+import time
+import typing
 from typing import Union
 
-import math, time
-
-import typing
+from talon import Context, Module, app, canvas, cron, ctrl, screen, ui
+from talon.skia import Color, Rect, Shader
+from talon_plugins import eye_mouse, eye_zoom_mouse
 
 mod = Module()
 shimmer_effect_enabled = mod.setting(

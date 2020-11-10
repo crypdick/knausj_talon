@@ -1,8 +1,8 @@
-from talon import Context, actions, ui, Module, app, clip
 import os
 import re
 from itertools import islice
 
+from talon import Context, Module, actions, app, clip, ui
 
 mod = Module()
 pattern = re.compile(r"[A-Z][a-z]*|[a-z]+|\d")

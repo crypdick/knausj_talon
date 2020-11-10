@@ -1,6 +1,8 @@
-from talon import Module, screen, ui, actions, clip, app, settings
+import os
+import subprocess
 from datetime import datetime
-import os, subprocess
+
+from talon import Module, actions, app, clip, screen, settings, ui
 
 active_platform = app.platform
 default_command = None

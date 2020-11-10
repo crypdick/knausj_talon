@@ -1,10 +1,10 @@
-from talon import Module, fs, Context
-import os
 import csv
+import os
+import threading
 from pathlib import Path
 from typing import Dict, List, Tuple
-import threading
 
+from talon import Context, Module, fs
 
 # NOTE: This method requires this module to be one folder below the top-level
 #   knausj folder.

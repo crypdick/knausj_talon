@@ -1,8 +1,7 @@
 import contextlib
 import time
 
-from talon import actions, ctrl, Module, ui, Context
-
+from talon import Context, Module, actions, ctrl, ui
 
 mod = Module()
 

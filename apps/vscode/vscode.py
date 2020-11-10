@@ -1,5 +1,6 @@
-from talon import Context, actions, ui, Module, app, clip
 from typing import List, Union
+
+from talon import Context, Module, actions, app, clip, ui
 
 is_mac = app.platform == "mac"
 

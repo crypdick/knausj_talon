@@ -1,9 +1,9 @@
-from collections import defaultdict
 import itertools
 import math
-from typing import Dict, List, Iterable, Set, Tuple, Union
+from collections import defaultdict
+from typing import Dict, Iterable, List, Set, Tuple, Union
 
-from talon import Module, Context, actions, imgui, Module, registry, ui, app
+from talon import Context, Module, actions, app, imgui, registry, ui
 from talon.grammar import Phrase
 
 mod = Module()

@@ -1,4 +1,5 @@
 import time
+
 from talon import Context, Module, actions, clip, ui
 
 ctx = Context()

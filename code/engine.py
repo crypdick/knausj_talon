@@ -1,5 +1,4 @@
-from talon import Context, Module
-from talon import speech_system
+from talon import Context, Module, speech_system
 
 mod = Module()
 

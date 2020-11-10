@@ -1,10 +1,12 @@
 import os
 import os.path
-import requests
+import tempfile
 import time
 from pathlib import Path
-from talon import ctrl, ui, Module, Context, actions, clip
-import tempfile
+
+import requests
+
+from talon import Context, Module, actions, clip, ctrl, ui
 
 # Courtesy of https://github.com/anonfunc/talon-user/blob/master/apps/jetbrains.py
 
