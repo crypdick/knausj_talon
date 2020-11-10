@@ -619,4 +619,3 @@ def commands_updated(_):
 
 
 app.register("launch", refresh_context_command_map)
-

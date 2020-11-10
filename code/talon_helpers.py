@@ -39,4 +39,3 @@ class Actions:
             )
 
         clip.set_text(result)
-

@@ -169,4 +169,3 @@ class user_actions:
         actions.key("alt-f alt-o enter esc")
 
     # find_and_replace.py support end
-

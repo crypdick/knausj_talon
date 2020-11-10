@@ -595,4 +595,3 @@ def gui_files(gui: imgui.GUI):
 
     #   if gui.button("Previous..."):
     #        actions.user.file_manager_previous_file_page()
-

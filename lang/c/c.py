@@ -233,4 +233,3 @@ class user_actions:
 
     def code_insert_library(text: str, selection: str):
         actions.user.paste("include <{}>".format(selection))
-

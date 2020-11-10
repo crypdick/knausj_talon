@@ -33,12 +33,19 @@ default_cursor = {
 }
 
 # todo figure out why notepad++ still shows the cursor sometimes.
-hidden_cursor = os.path.join(os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur")
+hidden_cursor = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), r"Resources\HiddenCursor.cur"
+)
 
 mod = Module()
-mod.list("mouse_button", desc="List of mouse button words to mouse_click index parameter")
+mod.list(
+    "mouse_button", desc="List of mouse button words to mouse_click index parameter"
+)
 setting_mouse_enable_pop_click = mod.setting(
-    "mouse_enable_pop_click", type=int, default=0, desc="Enable pop to click when control mouse is enabled.",
+    "mouse_enable_pop_click",
+    type=int,
+    default=0,
+    desc="Enable pop to click when control mouse is enabled.",
 )
 setting_mouse_enable_pop_stops_scroll = mod.setting(
     "mouse_enable_pop_stops_scroll",
@@ -53,10 +60,16 @@ setting_mouse_wake_hides_cursor = mod.setting(
     desc="When enabled, mouse wake will hide the cursor. mouse_wake enables zoom mouse.",
 )
 setting_mouse_hide_mouse_gui = mod.setting(
-    "mouse_hide_mouse_gui", type=int, default=0, desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
+    "mouse_hide_mouse_gui",
+    type=int,
+    default=0,
+    desc="When enabled, the 'Scroll Mouse' GUI will not be shown.",
 )
 setting_mouse_continuous_scroll_amount = mod.setting(
-    "mouse_continuous_scroll_amount", type=int, default=80, desc="The default amount used when scrolling continuously",
+    "mouse_continuous_scroll_amount",
+    type=int,
+    default=80,
+    desc="The default amount used when scrolling continuously",
 )
 setting_mouse_wheel_down_amount = mod.setting(
     "mouse_wheel_down_amount",
@@ -111,7 +124,10 @@ class Actions:
 
     def mouse_cancel_zoom_mouse():
         """Cancel zoom mouse if pending"""
-        if eye_zoom_mouse.zoom_mouse.enabled and eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE:
+        if (
+            eye_zoom_mouse.zoom_mouse.enabled
+            and eye_zoom_mouse.zoom_mouse.state != eye_zoom_mouse.STATE_IDLE
+        ):
             eye_zoom_mouse.zoom_mouse.cancel()
 
     def mouse_trigger_zoom_mouse():
@@ -202,17 +218,25 @@ def show_cursor_helper(show):
         import win32con
 
         try:
-            Registrykey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Control Panel\Cursors", 0, winreg.KEY_WRITE)
+            Registrykey = winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER, r"Control Panel\Cursors", 0, winreg.KEY_WRITE
+            )
 
             for value_name, value in default_cursor.items():
                 if show:
-                    winreg.SetValueEx(Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, value)
+                    winreg.SetValueEx(
+                        Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, value
+                    )
                 else:
-                    winreg.SetValueEx(Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, hidden_cursor)
+                    winreg.SetValueEx(
+                        Registrykey, value_name, 0, winreg.REG_EXPAND_SZ, hidden_cursor
+                    )
 
             winreg.CloseKey(Registrykey)
 
-            ctypes.windll.user32.SystemParametersInfoA(win32con.SPI_SETCURSORS, 0, None, 0)
+            ctypes.windll.user32.SystemParametersInfoA(
+                win32con.SPI_SETCURSORS, 0, None, 0
+            )
 
         except WindowsError:
             print("Unable to show_cursor({})".format(str(show)))
@@ -225,7 +249,10 @@ def on_pop(active):
     if gaze_job or scroll_job:
         if setting_mouse_enable_pop_stops_scroll.get() >= 1:
             stop_scroll()
-    elif not eye_zoom_mouse.zoom_mouse.enabled and eye_mouse.mouse.attached_tracker is not None:
+    elif (
+        not eye_zoom_mouse.zoom_mouse.enabled
+        and eye_mouse.mouse.attached_tracker is not None
+    ):
         if setting_mouse_enable_pop_click.get() >= 1:
             ctrl.mouse_click(button=0, hold=16000)
 
