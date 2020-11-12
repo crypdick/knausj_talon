@@ -2,8 +2,9 @@
 line-length = 88
 
 [flake8]
-max-line-length = 88
-ignore = 'E501'
+max-line-length = 89
+ignore = 'E501, E731'
+extend-ignore = 'E203, W503, E731'
 
 [tool.isort]
 line_length = 88
