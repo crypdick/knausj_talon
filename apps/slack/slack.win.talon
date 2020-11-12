@@ -17,6 +17,7 @@ channel <user.text>:
 (slack | lack) [channel] info: key(ctrl-shift-i)
 channel up: key(alt-up)
 channel down: key(alt-down)
+
 # Navigation
 (move | next) focus: key(ctrl-`)
 [next] (section | zone): key(f6)
@@ -33,6 +34,7 @@ channel down: key(alt-down)
 (slack | lack) unread [messages]: key(ctrl-j)
 #(go | undo | toggle) full: key(ctrl-cmd-f)
 (slack | lack) (find | search): key(ctrl-f)
+
 # Messaging
 grab left: key(shift-up)
 grab right: key(shift-down)
@@ -55,14 +57,17 @@ bold: key(ctrl-b)
 mark all read: key(shift-esc)
 mark channel read: key(esc)
 (clear | scrap | scratch): key(ctrl-a backspace)
-    # Files and Snippets
+
+# Files and Snippets
 (slack | lack) upload: key(ctrl-u)
 (slack | lack) snippet: key(ctrl-shift-enter)
-    # Calls
+
+# Calls
 ([toggle] mute | unmute): key(m)
 (slack | lack) ([toggle] video): key(v)
 (slack | lack) invite: key(a)
-    # Miscellaneous
+
+# Miscellaneous
 (slack | lack) shortcuts: key(ctrl-/)
 emote <user.text>: "{text}"
 toggle left sidebar: key(ctrl-shift-d)
