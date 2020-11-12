@@ -56,13 +56,6 @@ shrink window:
     sleep(200ms)
     user.system_command("i3-msg move position center")
 
-horizontal (shell|terminal):
-    user.system_command("i3-msg split h")
-    user.i3wm_shell()
-
-vertical (shell|terminal):
-    user.system_command("i3-msg split v")
-    user.i3wm_shell()
 
 # XXX - just replace with shuffle eventually?
 # XXX - like also need to match the generic talon commands
