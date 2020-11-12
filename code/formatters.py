@@ -1,7 +1,7 @@
 import re
 from typing import List, Union
 
-from talon import Context, Module, actions, imgui, ui
+from talon import Context, Module, actions, imgui
 from talon.grammar import Phrase
 
 ctx = Context()
@@ -76,7 +76,9 @@ SEP = False
 
 
 def words_with_joiner(joiner):
-    """Pass through words unchanged, but add a separator between them."""
+    """
+    Pass through words unchanged, but add a separator between them.
+    """
 
     def formatter_function(i, word, _):
         return word if i == 0 else joiner + word
@@ -85,13 +87,14 @@ def words_with_joiner(joiner):
 
 
 def first_vs_rest(first_func, rest_func=lambda w: w):
-    """Supply one or two transformer functions for the first and rest of
-    words respectively.
+    """
+    Supply one or two transformer functions for the first and rest of words
+    respectively.
 
-    Leave second argument out if you want all but the first word to be passed
-    through unchanged.
-    Set first argument to None if you want the first word to be passed
-    through unchanged."""
+    Leave second argument out if you want all but the first word to be
+    passed through unchanged. Set first argument to None if you want the
+    first word to be passed through unchanged.
+    """
     if first_func is None:
         first_func = lambda w: w
 
@@ -102,7 +105,9 @@ def first_vs_rest(first_func, rest_func=lambda w: w):
 
 
 def every_word(word_func):
-    """Apply one function to every word."""
+    """
+    Apply one function to every word.
+    """
 
     def formatter_function(i, word, _):
         return word_func(word)
@@ -157,7 +162,7 @@ formatters_words = {
     "camel": formatters_dict["PRIVATE_CAMEL_CASE"],
     "dotted": formatters_dict["DOT_SEPARATED"],
     "dubstring": formatters_dict["DOUBLE_QUOTED_STRING"],
-    "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
+    # "dunder": formatters_dict["DOUBLE_UNDERSCORE"],
     "hammer": formatters_dict["PUBLIC_CAMEL_CASE"],
     "kebab": formatters_dict["DASH_SEPARATED"],
     "packed": formatters_dict["DOUBLE_COLON_SEPARATED"],
@@ -186,7 +191,9 @@ mod.list("formatters", desc="list of formatters")
 
 @mod.capture(rule="{self.formatters}+")
 def formatters(m) -> str:
-    "Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'"
+    """
+    Returns a comma-separated string of formatters e.g. 'SNAKE,DUBSTRING'.
+    """
     return ",".join(m.formatters_list)
 
 
@@ -197,7 +204,9 @@ def formatters(m) -> str:
     rule="<self.formatters> <user.text> (<user.text> | <user.formatter_immune>)*"
 )
 def format_text(m) -> str:
-    "Formats the text and returns a string"
+    """
+    Formats the text and returns a string.
+    """
     out = ""
     formatters = m[0]
     for chunk in m[1:]:
@@ -209,7 +218,9 @@ def format_text(m) -> str:
 
 
 class ImmuneString(object):
-    """Wrapper that makes a string immune from formatting."""
+    """
+    Wrapper that makes a string immune from formatting.
+    """
 
     def __init__(self, string):
         self.string = string
@@ -221,10 +232,10 @@ class ImmuneString(object):
     rule="(<user.symbol_key> | <user.letter> | numb <number>)"
 )
 def formatter_immune(m) -> ImmuneString:
-    """Text that can be interspersed into a formatter, e.g. characters.
+    """
+    Text that can be interspersed into a formatter, e.g. characters.
 
     It will be inserted directly, without being formatted.
-
     """
     if hasattr(m, "number"):
         value = m.number
@@ -236,46 +247,68 @@ def formatter_immune(m) -> ImmuneString:
 @mod.action_class
 class Actions:
     def formatted_text(phrase: Union[str, Phrase], formatters: str) -> str:
-        """Formats a phrase according to formatters. formatters is a comma-separated string of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
+        """
+        Formats a phrase according to formatters.
+
+        formatters is a comma-separated string of formatters (e.g.
+        'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')
+        """
         return format_phrase(phrase, formatters)
 
     def insert_formatted(phrase: Union[str, Phrase], formatters: str):
-        """Inserts a phrase formatted according to formatters. Formatters is a comma separated list of formatters (e.g. 'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')"""
+        """
+        Inserts a phrase formatted according to formatters.
+
+        Formatters is a comma separated list of formatters (e.g.
+        'CAPITALIZE_ALL_WORDS,DOUBLE_QUOTED_STRING')
+        """
         actions.insert(format_phrase(phrase, formatters))
 
     def formatters_help_toggle():
-        """Lists all formatters"""
+        """
+        Lists all formatters.
+        """
         if gui.showing:
             gui.hide()
         else:
             gui.show()
 
     def formatters_recent_toggle():
-        """Toggles list of recent formatters"""
+        """
+        Toggles list of recent formatters.
+        """
         if recent_gui.showing:
             recent_gui.hide()
         else:
             recent_gui.show()
 
     def formatters_recent_select(number: int):
-        """Inserts a recent formatter"""
+        """
+        Inserts a recent formatter.
+        """
         if len(formatted_phrase_history) >= number:
             return formatted_phrase_history[number - 1]
         return ""
 
     def formatters_clear_last():
-        """Clears the last formatted phrase"""
+        """
+        Clears the last formatted phrase.
+        """
         if len(formatted_phrase_history) > 0:
             for character in formatted_phrase_history[0]:
                 actions.edit.delete()
 
     def formatters_reformat_last(formatters: str) -> str:
-        """Reformats last formatted phrase"""
+        """
+        Reformats last formatted phrase.
+        """
         global last_phrase
         return format_phrase(last_phrase, formatters)
 
     def formatters_reformat_selection(formatters: str) -> str:
-        """Reformats the current selection."""
+        """
+        Reformats the current selection.
+        """
         selected = edit.selected_text()
         unformatted = re.sub(r"[^a-zA-Z0-9]+", " ", selected).lower()
         # TODO: Separate out camelcase & studleycase vars
@@ -288,7 +321,9 @@ class Actions:
         return text
 
     def insert_many(strings: List[str]) -> None:
-        """Insert a list of strings, sequentially."""
+        """
+        Insert a list of strings, sequentially.
+        """
         for string in strings:
             actions.insert(string)
 

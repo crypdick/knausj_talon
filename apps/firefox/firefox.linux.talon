@@ -73,3 +73,6 @@ action(browser.submit_form):
 
 action(browser.toggle_dev_tools):
 	key(ctrl-shift-i)
+
+
+# TODO enable tab logic for firefox

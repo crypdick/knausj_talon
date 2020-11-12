@@ -26,4 +26,4 @@ repos:
     rev: 3.8.2
     hooks:
       - id: flake8
-        args: ['--config=pyproject.toml']
+        args: ['--config=pyproject.toml', '--ignore=E731']
