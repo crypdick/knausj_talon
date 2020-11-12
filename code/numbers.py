@@ -1,4 +1,4 @@
-from talon import Context, Module, actions
+from talon import Context, Module
 
 digits = [
     "zero",
@@ -52,7 +52,6 @@ scales = [
 digits_map = {n: i for i, n in enumerate(digits)}
 teens_map = {n: i + 11 for i, n in enumerate(teens)}
 tens_map = {n: 10 * (i + 1) for i, n in enumerate(tens)}
-digits_map["oh"] = 0
 
 scales_map = {scales[0]: 100}
 scales_map.update({n: 10 ** ((i + 1) * 3) for i, n in enumerate(scales[1:])})
@@ -62,8 +61,12 @@ alt_teens = "(" + ("|".join(teens_map.keys())) + ")"
 alt_tens = "(" + ("|".join(tens_map.keys())) + ")"
 alt_scales = "(" + ("|".join(scales_map.keys())) + ")"
 
-# fuse scales (hundred, thousand) leftward onto numbers (one, twelve, twenty, etc)
+
 def fuse_scale(words, limit=None):
+    """
+    fuse scales (hundred, thousand) leftward onto numbers (one, twelve, twenty,
+    etc)
+    """
     ret = []
     n = None
     scale = 1
@@ -92,8 +95,12 @@ def fuse_scale(words, limit=None):
     return ret
 
 
-# fuse small numbers leftward onto larger numbers
 def fuse_num(words):
+    """
+    fuse small numbers leftward onto larger numbers.
+
+    TODO example
+    """
     ret = []
     acc = None
     sig = 0
@@ -123,26 +130,32 @@ def fuse_num(words):
     return ret
 
 
-"""
-def test_num(n):
-    print('testing', n)
-    step1 = fuse_scale(list(n), 1000)
-    step2 = fuse_num(step1)
-    step3 = fuse_scale(step2)
-    step4 = fuse_num(step3)
-    print('step1', step1)
-    print('step2', step2)
-    print('step3', step3)
-    print('step4', step4)
-    return step4[0]
-assert(test_num([1, 'hundred', 'thousand', 'and', 5, 'thousand', 'and', 6, 'thousand']) == 1050006000)
-assert(test_num([1, 'hundred', 'and', 5, 'thousand']) == 105000)
-assert(test_num([1, 'thousand', 'thousand']) == 1000000)
-assert(test_num([1, 'million', 5, 'hundred', 1, 'thousand']) == 1501000)
-assert(test_num([1, 'million', 5, 'hundred', 'and', 1, 'thousand', 1, 'hundred', 'and', 6]) == 1501106)
-assert(test_num([1, 'million', 1, 1]) == 10000011)
-assert(test_num([1, 'million', 10, 10]) == 100001010)
-"""
+# def test_num(n):
+#     print("testing", n)
+#     step1 = fuse_scale(list(n), 1000)
+#     step2 = fuse_num(step1)
+#     step3 = fuse_scale(step2)
+#     step4 = fuse_num(step3)
+#     print("step1", step1)
+#     print("step2", step2)
+#     print("step3", step3)
+#     print("step4", step4)
+#     return step4[0]
+#
+#
+# assert (
+#     test_num([1, "hundred", "thousand", "and", 5, "thousand", "and", 6, "thousand"])
+#     == 1050006000
+# )
+# assert test_num([1, "hundred", "and", 5, "thousand"]) == 105000
+# assert test_num([1, "thousand", "thousand"]) == 1000000
+# assert test_num([1, "million", 5, "hundred", 1, "thousand"]) == 1501000
+# assert (
+#     test_num([1, "million", 5, "hundred", "and", 1, "thousand", 1, "hundred", "and", 6])
+#     == 1501106
+# )
+# assert test_num([1, "million", 1, 1]) == 10000011
+# assert test_num([1, "million", 10, 10]) == 100001010
 
 ctx = Context()
 
@@ -180,12 +193,12 @@ def number_scaled(m):
 # Example: " one one five            " == 115
 #          " one fifteen             " == 115
 #          " one hundred and fifteen " == 115
-@ctx.capture("number", rule=f"(<digits> | [<digits>] <user.number_scaled>)")
+@ctx.capture("number", rule="(<digits> | [<digits>] <user.number_scaled>)")
 def number(m):
     return int("".join(str(i) for i in list(m)))
 
 
-@ctx.capture("number_signed", rule=f"[negative] <number>")
+@ctx.capture("number_signed", rule="[negative] <number>")
 def number_signed(m):
     number = m[-1]
     if m[0] == "negative":
@@ -197,6 +210,8 @@ mod = Module()
 mod.list("number_scaled", desc="Mix of numbers and digits")
 
 
-@mod.capture
+@mod.capture  # noqa: F811
 def number_scaled(m) -> str:
-    "Returns a series of numbers as a string"
+    """
+    Returns a series of numbers as a string.
+    """
