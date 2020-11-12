@@ -1,4 +1,4 @@
-from talon import Context, Module, actions, settings, ui
+from talon import Module, actions, settings
 
 mod = Module()
 
@@ -20,16 +20,22 @@ mod.setting(
 @mod.action_class
 class Actions:
     def i3wm_launch():
-        """Trigger the i3 launcher: ex rofi"""
+        """
+        Trigger the i3 launcher: ex rofi.
+        """
         key = settings.get("user.i3_mod_key")
-        actions.key(f"{key}-d")
+        actions.key(f"{key}-space")
 
     def i3wm_shell():
-        """Launch a shell"""
+        """
+        Launch a shell.
+        """
         key = settings.get("user.i3_mod_key")
         actions.key(f"{key}-enter")
 
     def i3wm_lock():
-        """Trigger the lock screen"""
+        """
+        Trigger the lock screen.
+        """
         key = settings.get("user.i3_mod_key")
         actions.key(f"{key}-shift-x")
