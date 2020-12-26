@@ -202,7 +202,8 @@ class Actions:
         if scroll_job is None:
             start_scroll()
 
-        gui_wheel.show()
+        if setting_mouse_hide_mouse_gui.get() == 0:
+            gui_wheel.show()
 
     def mouse_scroll_up():
         """

@@ -1,6 +1,6 @@
 import os
 
-from talon import Context, Module, actions, app, clip, cron, fs, imgui, ui
+from talon import Context, Module, actions, app, clip, fs, imgui, ui
 
 ########################################################################
 # global settings
@@ -104,7 +104,7 @@ def raise_homophones(word, forced=False, selection=False):
 
     actions.mode.enable("user.homophones")
     show_help = False
-    gui.freeze()
+    gui.show()
 
 
 @imgui.open(y=0, x=main_screen.width / 2.6, software=False)
@@ -124,40 +124,54 @@ def gui(gui: imgui.GUI):
 def show_help_gui():
     global show_help
     show_help = True
-    gui.freeze()
+    gui.show()
 
 
 @mod.capture(rule="{self.homophones_canonicals}")
 def homophones_canonical(m) -> str:
-    "Returns a single string"
+    """
+    Returns a single string.
+    """
     return m.homophones_canonicals
 
 
 @mod.action_class
 class Actions:
     def homophones_hide():
-        """Hides the homophones display"""
+        """
+        Hides the homophones display.
+        """
         close_homophones()
 
     def homophones_show(m: str):
-        """Sentence formatter"""
+        """
+        Sentence formatter.
+        """
         print(m)
         raise_homophones(m, False, False)
 
     def homophones_show_selection():
-        """Sentence formatter"""
+        """
+        Sentence formatter.
+        """
         raise_homophones(actions.edit.selected_text(), False, True)
 
     def homophones_force_show(m: str):
-        """Sentence formatter"""
+        """
+        Sentence formatter.
+        """
         raise_homophones(m, True, False)
 
     def homophones_force_show_selection():
-        """Sentence formatter"""
+        """
+        Sentence formatter.
+        """
         raise_homophones(actions.edit.selected_text(), True, True)
 
     def homophones_select(number: int) -> str:
-        """selects the homophone by number"""
+        """
+        selects the homophone by number.
+        """
         if number <= len(active_word_list) and number > 0:
             return active_word_list[number - 1]
 

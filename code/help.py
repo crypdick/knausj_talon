@@ -1,10 +1,8 @@
-import itertools
 import math
 from collections import defaultdict
-from typing import Dict, Iterable, List, Set, Tuple, Union
+from typing import Dict, Iterable, List, Set, Tuple
 
 from talon import Context, Module, actions, app, imgui, registry, ui
-from talon.grammar import Phrase
 
 mod = Module()
 mod.list("help_contexts", desc="list of available contexts")
@@ -34,7 +32,7 @@ search_phrase = None
 context_map = {}
 
 current_context_page = 1
-sorted_context_map_keys = None
+sorted_context_map_keys = []
 
 selected_context = None
 selected_context_page = 1
@@ -55,7 +53,7 @@ def update_title():
 
     if live_update:
         if gui_context_help.showing:
-            if selected_context == None:
+            if selected_context is None:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.active_contexts())
@@ -123,7 +121,8 @@ def get_current_context_page_length() -> int:
 
 
 def get_command_line_count(command: Tuple[str, str]) -> int:
-    """This should be kept in sync with draw_commands
+    """
+    This should be kept in sync with draw_commands.
     """
     _, body = command
     lines = len(body.split("\n"))
@@ -134,13 +133,14 @@ def get_command_line_count(command: Tuple[str, str]) -> int:
 
 
 def get_pages(item_line_counts: List[int]) -> List[int]:
-    """Given some set of indivisible items with given line counts,
-    return the page number each item should appear on.
+    """
+    Given some set of indivisible items with given line counts, return the page
+    number each item should appear on.
 
     If an item will cross a page boundary, it is moved to the next page,
-    so that pages may be shorter than the maximum lenth, but not longer. The only
-    exception is when an item is longer than the maximum page length, in which
-    case that item will be placed on a longer page.
+    so that pages may be shorter than the maximum lenth, but not longer.
+    The only exception is when an item is longer than the maximum page
+    length, in which case that item will be placed on a longer page.
     """
     current_page_line_count = 0
     current_page = 1
@@ -199,18 +199,21 @@ def gui_context_help(gui: imgui.GUI):
         current_item_index = 1
         current_selection_index = 1
         for key in sorted_context_map_keys:
-            target_page = get_context_page(current_item_index)
+            if key in ctx.lists["self.help_contexts"]:
+                target_page = get_context_page(current_item_index)
 
-            if current_context_page == target_page:
-                button_name = format_context_button(
-                    current_selection_index, key, ctx.lists["self.help_contexts"][key]
-                )
+                if current_context_page == target_page:
+                    button_name = format_context_button(
+                        current_selection_index,
+                        key,
+                        ctx.lists["self.help_contexts"][key],
+                    )
 
-                if gui.button(button_name):
-                    selected_context = ctx.lists["self.help_contexts"][key]
-                current_selection_index = current_selection_index + 1
+                    if gui.button(button_name):
+                        selected_context = ctx.lists["self.help_contexts"][key]
+                    current_selection_index = current_selection_index + 1
 
-            current_item_index += 1
+                current_item_index += 1
 
         if total_page_count > 1:
             gui.spacer()
@@ -275,7 +278,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     title = f"Search: {search_phrase}"
     commands_grouped = get_search_commands(search_phrase)
-    commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
+    # commands_flat = list(itertools.chain.from_iterable(commands_grouped.values()))
 
     sorted_commands_grouped = sorted(
         commands_grouped.items(),
@@ -292,7 +295,7 @@ def draw_search_commands(gui: imgui.GUI):
 
     draw_commands_title(gui, title)
 
-    current_item_index = 1
+    # current_item_index = 1
     for (context, commands), page in zip(sorted_commands_grouped, pages):
         if page == selected_context_page:
             gui.text(format_context_title(context))
@@ -454,7 +457,9 @@ def register_events(register: bool):
 @mod.action_class
 class Actions:
     def help_alphabet(ab: dict):
-        """Provides the alphabet dictionary"""
+        """
+        Provides the alphabet dictionary.
+        """
         # what you say is stored as a trigger
         global alphabet
         alphabet = ab
@@ -472,7 +477,9 @@ class Actions:
         actions.mode.enable("user.help")
 
     def help_context_enabled():
-        """Display contextual command info"""
+        """
+        Display contextual command info.
+        """
         reset()
         refresh_context_command_map(enabled_only=True)
         gui_alphabet.hide()
@@ -481,7 +488,9 @@ class Actions:
         actions.mode.enable("user.help")
 
     def help_context():
-        """Display contextual command info"""
+        """
+        Display contextual command info.
+        """
         reset()
         refresh_context_command_map()
         gui_alphabet.hide()
@@ -490,7 +499,9 @@ class Actions:
         actions.mode.enable("user.help")
 
     def help_search(phrase: str):
-        """Display command info for search phrase"""
+        """
+        Display command info for search phrase.
+        """
         global search_phrase
 
         reset()
@@ -502,7 +513,9 @@ class Actions:
         actions.mode.enable("user.help")
 
     def help_selected_context(m: str):
-        """Display command info for selected context"""
+        """
+        Display command info for selected context.
+        """
         global selected_context
         global selected_context_page
 
@@ -520,7 +533,9 @@ class Actions:
         actions.mode.enable("user.help")
 
     def help_next():
-        """Navigates to next page"""
+        """
+        Navigates to next page.
+        """
         global current_context_page
         global selected_context
         global selected_context_page
@@ -539,7 +554,9 @@ class Actions:
                     selected_context_page = 1
 
     def help_select_index(index: int):
-        """Select the context by a number"""
+        """
+        Select the context by a number.
+        """
         global sorted_context_map_keys, selected_context
         if gui_context_help.showing:
             if index < setting_help_max_contexts_per_page.get() and (
@@ -557,7 +574,9 @@ class Actions:
                     ]
 
     def help_previous():
-        """Navigates to previous page"""
+        """
+        Navigates to previous page.
+        """
         global current_context_page
         global selected_context
         global selected_context_page
@@ -577,7 +596,9 @@ class Actions:
                     selected_context_page = total_page_count
 
     def help_return():
-        """Returns to the main help window"""
+        """
+        Returns to the main help window.
+        """
         global selected_context
         global selected_context_page
         global show_enabled_contexts_only
@@ -588,18 +609,22 @@ class Actions:
             selected_context = None
 
     def help_refresh():
-        """Refreshes the help"""
+        """
+        Refreshes the help.
+        """
         global show_enabled_contexts_only
         global selected_context
 
         if gui_context_help.showing:
-            if selected_context == None:
+            if selected_context is None:
                 refresh_context_command_map(show_enabled_contexts_only)
             else:
                 update_active_contexts_cache(registry.active_contexts())
 
     def help_hide():
-        """Hides the help"""
+        """
+        Hides the help.
+        """
         reset()
 
         # print("help_hide - alphabet gui_alphabet: {}".format(gui_alphabet.showing))
