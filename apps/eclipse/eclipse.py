@@ -1,6 +1,4 @@
-from typing import List, Union
-
-from talon import Context, Module, actions, app, clip, ui
+from talon import Context, Module, actions, app
 
 is_mac = app.platform == "mac"
 
@@ -25,12 +23,14 @@ class win_actions:
         # if title == "":
         #    title = ui.active_window().doc
 
-        result = title.split(" - ")[1]
+        if " - " in title:
+            result = title.split(" - ")[1]
+        else:
+            result = title
 
         if "." in result:
             return result
 
-        print(result)
         return ""
 
     def file_ext():
@@ -56,6 +56,9 @@ class edit_actions:
         actions.key("ctrl-l")
         actions.insert(str(n))
         actions.key("enter")
+
+    def delete_line():
+        actions.key("ctrl-d")
 
 
 @ctx.action_class("user")
@@ -104,7 +107,9 @@ class user_actions:
     # find_and_replace.py support begin
 
     def find(text: str):
-        """Triggers find in current editor"""
+        """
+        Triggers find in current editor.
+        """
 
         actions.key("ctrl-f")
         if text:
@@ -117,7 +122,9 @@ class user_actions:
         actions.key("shift-enter")
 
     def find_everywhere(text: str):
-        """Triggers find across project"""
+        """
+        Triggers find across project.
+        """
         actions.key("ctrl-h")
 
         if text:
@@ -126,37 +133,51 @@ class user_actions:
     # todo: these commands should only be available
     # when it's focused
     def find_toggle_match_by_case():
-        """Toggles find match by case sensitivity"""
+        """
+        Toggles find match by case sensitivity.
+        """
         actions.key("alt-c")
 
     def find_toggle_match_by_word():
-        """Toggles find match by whole words"""
+        """
+        Toggles find match by whole words.
+        """
         actions.key("alt-w")
 
     def find_toggle_match_by_regex():
-        """Toggles find match by regex"""
+        """
+        Toggles find match by regex.
+        """
         actions.key("alt-e")
 
     def replace(text: str):
-        """Search and replaces in the active editor"""
+        """
+        Search and replaces in the active editor.
+        """
         actions.key("ctrl-f")
 
         if text:
             actions.insert(text)
 
     def replace_everywhere(text: str):
-        """Search and replaces in the entire project"""
+        """
+        Search and replaces in the entire project.
+        """
         actions.key("alt-a f")
 
         if text:
             actions.insert(text)
 
     def replace_confirm():
-        """Confirm replace at current position"""
+        """
+        Confirm replace at current position.
+        """
         actions.key("alt-r")
 
     def replace_confirm_all():
-        """Confirm replace all"""
+        """
+        Confirm replace all.
+        """
         actions.key("alt-a")
 
     def select_previous_occurrence(text: str):
@@ -167,6 +188,6 @@ class user_actions:
     def select_next_occurrence(text: str):
         actions.edit.find(text)
         actions.sleep("100ms")
-        actions.key("alt-f alt-o enter esc")
+        actions.key("alt-f alt-o esc")
 
     # find_and_replace.py support end

@@ -12,6 +12,7 @@ scroll_job = None
 gaze_job = None
 cancel_scroll_on_pop = True
 
+# TODO wtf
 default_cursor = {
     "AppStarting": r"%SystemRoot%\Cursors\aero_working.ani",
     "Arrow": r"%SystemRoot%\Cursors\aero_arrow.cur",
@@ -45,7 +46,7 @@ setting_mouse_enable_noise_control = mod.setting(
     "mouse_enable_noise_control",
     type=int,
     default=1,
-    desc="Enable pop to click when control mouse is enabled.",
+    desc="Enable mouse noise control when control mouse is enabled.",
 )
 setting_mouse_enable_pop_stops_scroll = mod.setting(
     "mouse_enable_pop_stops_scroll",
@@ -80,6 +81,7 @@ setting_mouse_wheel_down_amount = mod.setting(
     "default)",
 )
 
+# TODO wtf
 continuous_scoll_mode = ""
 
 
@@ -93,6 +95,13 @@ def gui_wheel(gui: imgui.GUI):
 
 @mod.action_class
 class Actions:
+    """
+    Contains definitions for mouse modes (such as sleep/wake/calibrate) and
+    actions (such as scrolling up/down)
+
+    The vocab to activate these modes are found in mouse.talon
+    """
+
     def mouse_show_cursor():
         """
         Shows the cursor.
@@ -150,7 +159,7 @@ class Actions:
 
     def mouse_trigger_zoom_mouse():
         """
-        Trigger zoom mouse if enabled.
+        Trigger zoom mouse on pop if enabled.
         """
         if eye_zoom_mouse.zoom_mouse.enabled:
             eye_zoom_mouse.zoom_mouse.on_pop(eye_zoom_mouse.zoom_mouse.state)
@@ -161,14 +170,9 @@ class Actions:
         dragging.
         """
         if 1 not in ctrl.mouse_buttons_down():
-            # print("start drag...")
-            ctrl.mouse_click(button=0, down=True)
-            # app.notify("drag started")
-        else:
-            # print("end drag...")
+            ctrl.mouse_click(button=0, down=True)  # start dragging
+        else:  # end dragging
             ctrl.mouse_click(button=0, up=True)
-
-        # app.notify("drag stopped")
 
     def mouse_sleep():
         """
@@ -198,7 +202,8 @@ class Actions:
         if scroll_job is None:
             start_scroll()
 
-        gui_wheel.show()
+        if setting_mouse_hide_mouse_gui.get() == 0:
+            gui_wheel.show()
 
     def mouse_scroll_up():
         """
@@ -290,27 +295,38 @@ def show_cursor_helper(show):
 def on_pop(active):
     """
     Defines behavior for pop noises.
+
+    Currently, pop will left click wherever the cursor is if we are not in zoom
+    mode. If we are scrolling or gaze scrolling, pop will stop scrolling.
+
+    TODO: change pop to right click when zoom_mouse supports it
     """
+    print("pop detected")
     if gaze_job or scroll_job:
         if setting_mouse_enable_pop_stops_scroll.get() >= 1:
             stop_scroll()
-    elif (
-        not eye_zoom_mouse.zoom_mouse.enabled
-        and eye_mouse.mouse.attached_tracker is not None
-        and setting_mouse_enable_noise_control.get() >= 1
-    ):
-        ctrl.mouse_click(button=1, hold=16000)  # button=1 == right click
+        elif (
+            not eye_zoom_mouse.zoom_mouse.enabled
+            and eye_mouse.mouse.attached_tracker is not None
+            and setting_mouse_enable_noise_control.get() >= 1
+        ):
+            ctrl.mouse_click(button=0)  # button=1 == right click
 
 
 def on_hiss(active):
     """
-    Presses and holds left mouse button while hissing.
+    Defines the behavior for hiss noises.
+
+    Currently, presses the right button.
+
+    TODO press and holds left mouse button while hissing once zoom mouse supports it
 
     Args:
         active: Whether hiss is active
     """
-    if setting_mouse_enable_noise_control.get() >= 1:
-        ctrl.mouse_click(button=0, down=active, up=not active)
+    ctrl.mouse_click(button=1)
+    # if setting_mouse_enable_noise_control.get() >= 1:
+    # ctrl.mouse_click(button=0, down=active, up=not active)
 
 
 # Registers the on_pop and on_hiss functions
@@ -348,7 +364,9 @@ def start_scroll():
 
 
 def gaze_scroll():
-    # print("gaze_scroll")
+    """
+    TODO wtf.
+    """
     if (
         eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_IDLE
     ):  # or eye_zoom_mouse.zoom_mouse.state == eye_zoom_mouse.STATE_SLEEP:
@@ -375,10 +393,11 @@ def gaze_scroll():
         amount = int(((y - midpoint) / (rect.height / 10)) ** 3)
         actions.mouse_scroll(by_lines=False, y=amount)
 
-    # print(f"gaze_scroll: {midpoint} {rect.height} {amount}")
-
 
 def stop_scroll():
+    """
+    TODO wtf.
+    """
     global scroll_amount, scroll_job, gaze_job
     scroll_amount = 0
     if scroll_job:
@@ -397,6 +416,9 @@ def stop_scroll():
 
 
 def start_cursor_scrolling():
+    """
+    TODO wtf.
+    """
     global scroll_job, gaze_job
     stop_scroll()
     gaze_job = cron.interval("60ms", gaze_scroll)
