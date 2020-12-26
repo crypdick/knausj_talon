@@ -6,7 +6,7 @@ from pathlib import Path
 
 import requests
 
-from talon import Context, Module, actions, clip, ctrl, ui
+from talon import Context, Module, actions, clip, ui
 
 # Courtesy of https://github.com/anonfunc/talon-user/blob/master/apps/jetbrains.py
 
@@ -63,12 +63,12 @@ def _get_nonce(port, file_prefix):
     try:
         with open(os.path.join(tempfile.gettempdir(), file_name), "r") as fh:
             return fh.read()
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         try:
             home = str(Path.home())
             with open(os.path.join(home, file_name), "r") as fh:
                 return fh.read()
-        except FileNotFoundError as eb:
+        except FileNotFoundError:
             print(f"Could not find {file_name} in tmp or home")
             return None
     except IOError as e:
@@ -129,11 +129,15 @@ and app.bundle: com.jetbrains.pycharm
 @mod.action_class
 class Actions:
     def idea(commands: str):
-        """Send a command to Jetbrains product"""
+        """
+        Send a command to Jetbrains product.
+        """
         idea_commands(commands)
 
     def idea_grab(times: int):
-        """Copies specified number of words to the left"""
+        """
+        Copies specified number of words to the left.
+        """
         old_clip = clip.get()
         try:
             original_line, original_column = get_idea_location()
