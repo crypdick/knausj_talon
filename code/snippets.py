@@ -18,7 +18,7 @@ def gui(gui: imgui.GUI):
         # print(str(registry.lists["user.code_functions"]))
         if function_list:
             for i, entry in enumerate(function_list):
-                gui.text("{}".format(entry, function_list))
+                gui.text("{} {}".format(entry, function_list))
 
 
 @mod.action_class
