@@ -1,12 +1,12 @@
 # defines placeholder actions and captures for ide-specific snippet functionality
-from talon import Context, Module, actions, app, imgui, registry
+from talon import Module, app, imgui, registry
 
 mod = Module()
 mod.tag("snippets", desc="Tag for enabling code snippet-related commands")
 mod.list("snippets", desc="List of code snippets")
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     gui.text("snippets")
     gui.line()
@@ -18,22 +18,30 @@ def gui(gui: imgui.GUI):
         # print(str(registry.lists["user.code_functions"]))
         if function_list:
             for i, entry in enumerate(function_list):
-                gui.text("{}".format(entry, function_list))
+                gui.text("{} {}".format(entry, function_list))
 
 
 @mod.action_class
 class Actions:
     def snippet_search(text: str):
-        """Triggers the program's snippet search"""
+        """
+        Triggers the program's snippet search.
+        """
 
     def snippet_insert(text: str):
-        """Inserts a snippet"""
+        """
+        Inserts a snippet.
+        """
 
     def snippet_create():
-        """Triggers snippet creation"""
+        """
+        Triggers snippet creation.
+        """
 
     def snippet_toggle():
-        """Toggles UI for available snippets"""
+        """
+        Toggles UI for available snippets.
+        """
         if gui.showing:
             gui.hide()
         else:

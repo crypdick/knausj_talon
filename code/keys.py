@@ -1,4 +1,4 @@
-from talon import Context, Module
+from talon import Context, Module, app
 
 default_alphabet = (
     "air beta cap delta each foxy geer hip ivy jeep cam look miner nafta otter peck quench rome scar "
@@ -240,6 +240,9 @@ alternate_keys = {
     "forward delete": "delete",
     # 'junk': 'backspace',
 }
+# mac apparently doesn't have the menu key.
+if app.platform in ("windows", "linux"):
+    alternate_keys["menu key"] = "menu"
 special_keys = {k: k for k in simple_keys}
 special_keys.update(alternate_keys)
 ctx.lists["self.special_key"] = special_keys

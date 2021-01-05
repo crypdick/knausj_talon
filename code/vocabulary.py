@@ -30,8 +30,8 @@ def prose(m) -> str:
 
 # TODO: unify this formatting code with the dictation formatting code, so that
 # user.prose behaves the same way as dictation mode.
-no_space_before = set(".,-!?;:#$)]}")
-no_space_after = set("/-([{")
+no_space_before = set("\n .,!?;:-/%#$)]}")
+no_space_after = set("\n -/#([{$£€¥₩₽₹")
 
 
 def format_phrase(m):
