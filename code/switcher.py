@@ -3,7 +3,7 @@ import re
 import time
 
 import talon
-from talon import Context, Module, actions, fs, imgui, ui
+from talon import Context, Module, actions, app, fs, imgui, ui
 
 # Construct at startup a list of overides for application names (similar to how homophone list is managed)
 # ie for a given talon recognition word set  `one note`, recognized this in these switcher functions as `ONENOTE`
@@ -29,7 +29,9 @@ running_application_dict = {}
 
 @mod.capture(rule="{self.running}")  # | <user.text>)")
 def running_applications(m) -> str:
-    "Returns a single application name"
+    """
+    Returns a single application name.
+    """
     try:
         return m.running
     except AttributeError:
@@ -38,7 +40,9 @@ def running_applications(m) -> str:
 
 @mod.capture(rule="{self.launch}")
 def launch_applications(m) -> str:
-    "Returns a single application name"
+    """
+    Returns a single application name.
+    """
     return m.launch
 
 
@@ -79,7 +83,9 @@ def update_lists():
 
 
 def update_overrides(name, flags):
-    """Updates the overrides list"""
+    """
+    Updates the overrides list.
+    """
     global overrides
     overrides = {}
 
@@ -102,14 +108,16 @@ fs.watch(overrides_directory, update_overrides)
 @mod.action_class
 class Actions:
     def get_running_app(name: str) -> ui.App:
-        """Get the first available running app with `name`."""
+        """
+        Get the first available running app with `name`.
+        """
         # We should use the capture result directly if it's already in the list
         # of running applications. Otherwise, name is from <user.text> and we
         # can be a bit fuzzier
         if name in running_application_dict:
-            for app in ui.apps():
-                if app.name == name and not app.background:
-                    return app
+            for app_ in ui.apps():
+                if app_.name == name and not app_.background:
+                    return app_
             raise RuntimeError(f'App not running: "{name}"')
         else:
             # Don't process silly things like "focus i"
@@ -118,16 +126,18 @@ class Actions:
                     f'Skipped getting app: "{name}" has less than 3 chars.'
                 )
 
-            for running_name, app in ctx.lists["self.running"].items():
+            for running_name, app_ in ctx.lists["self.running"].items():
                 if running_name == name or running_name.lower().startswith(
                     name.lower()
                 ):
-                    return app
+                    return app_
 
             raise RuntimeError(f'Could not find app "{name}"')
 
     def switcher_focus(name: str):
-        """Focus a new application by  name"""
+        """
+        Focus a new application by  name.
+        """
         app = actions.self.get_running_app(name)
         app.focus()
 
@@ -139,22 +149,28 @@ class Actions:
                 time.sleep(0.1)
 
     def switcher_launch(path: str):
-        """Launch a new application by path"""
+        """
+        Launch a new application by path.
+        """
         ui.launch(path=path)
 
     def switcher_toggle_running():
-        """Shows/hides all running applications"""
+        """
+        Shows/hides all running applications.
+        """
         if gui.showing:
             gui.hide()
         else:
             gui.show()
 
     def switcher_hide_running():
-        """Hides list of running applications"""
+        """
+        Hides list of running applications.
+        """
         gui.hide()
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     gui.text("Names of running applications")
     gui.line()

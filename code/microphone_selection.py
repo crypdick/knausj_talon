@@ -1,4 +1,4 @@
-from talon import Module, actions, app, imgui, scripting
+from talon import Module, actions, app, imgui
 from talon.lib import cubeb
 from talon.microphone import manager
 
@@ -21,7 +21,7 @@ def update_microphone_list():
             microphone_device_list.append(device)
 
 
-@imgui.open(software=False)
+@imgui.open(software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     gui.text("Select a Microphone")
     gui.line()
@@ -33,14 +33,15 @@ def gui(gui: imgui.GUI):
 @mod.action_class
 class Actions:
     def microphone_selection_toggle():
-        """"""
         if gui.showing:
             gui.hide()
         else:
             gui.show()
 
     def microphone_select(index: int):
-        """Selects a micropohone"""
+        """
+        Selects a micropohone.
+        """
         # print(str(index) + " " + str(len(microphone_device_list)))
         if 1 <= index and index <= len(microphone_device_list):
             microphone = microphone_device_list[index - 1].name

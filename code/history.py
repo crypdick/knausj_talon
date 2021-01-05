@@ -1,4 +1,4 @@
-from talon import Module, actions, imgui, speech_system
+from talon import Module, app, imgui, speech_system
 
 # We keep hist_len lines of history, but by default display only hist_short_len of them.
 hist_len = 50
@@ -26,7 +26,7 @@ def on_phrase(j):
 
 
 # todo: dynamic rect?
-@imgui.open(y=0, software=False)
+@imgui.open(y=0, software=app.platform == "linux")
 def gui(gui: imgui.GUI):
     global history
     gui.text("Command History")
@@ -44,31 +44,43 @@ mod = Module()
 @mod.action_class
 class Actions:
     def history_toggle():
-        """Toggles viewing the history"""
+        """
+        Toggles viewing the history.
+        """
         if gui.showing:
             gui.hide()
         else:
             gui.show()
 
     def history_enable():
-        """Enables the history"""
+        """
+        Enables the history.
+        """
         gui.show()
 
     def history_disable():
-        """Disables the history"""
+        """
+        Disables the history.
+        """
         gui.hide()
 
     def history_clear():
-        """Clear the history"""
+        """
+        Clear the history.
+        """
         global history
         history = []
 
     def history_more():
-        """Show more history"""
+        """
+        Show more history.
+        """
         global hist_more
         hist_more = True
 
     def history_less():
-        """Show less history"""
+        """
+        Show less history.
+        """
         global hist_more
         hist_more = False
