@@ -33,6 +33,9 @@ def gui(gui: imgui.GUI):
 @mod.action_class
 class Actions:
     def microphone_selection_toggle():
+        """
+        Toggles GUI element for microphone selection.
+        """
         if gui.showing:
             gui.hide()
         else:
