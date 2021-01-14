@@ -301,7 +301,7 @@ def on_pop(active):
 
     TODO: change pop to right click when zoom_mouse supports it
     """
-    print("pop detected")
+    app.notify("pop detected")
     if gaze_job or scroll_job:
         if setting_mouse_enable_pop_stops_scroll.get() >= 1:
             stop_scroll()
@@ -324,6 +324,7 @@ def on_hiss(active):
     Args:
         active: Whether hiss is active
     """
+    app.notify("hiss detected")
     ctrl.mouse_click(button=1)
     # if setting_mouse_enable_noise_control.get() >= 1:
     # ctrl.mouse_click(button=0, down=active, up=not active)

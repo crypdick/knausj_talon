@@ -82,7 +82,7 @@ launch <user.text>:
         user.i3wm_launch()
         sleep(100ms)
         insert("{text}")
-lock screen: user.i3wm_launch()
+# lock screen: user.i3wm_launch()
 
 (launch shell|koopa): user.i3wm_shell()
 

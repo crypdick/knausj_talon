@@ -6,20 +6,20 @@ run calibration: user.mouse_calibrate()
 trigger zoom: user.mouse_trigger_zoom_mouse()
 
 # control mouse buttons
-touch:
-	mouse_click(0)
-	# close the mouse grid if open
-	user.grid_close()
+#touch:
+#	mouse_click(0)
+#	# close the mouse grid if open
+#	user.grid_close()
 
-righty:
-	mouse_click(1)
-	# close the mouse grid if open
-	user.grid_close()
+#righty:
+#	mouse_click(1)
+#	# close the mouse grid if open
+#	user.grid_close()
 
-midclick:
-	mouse_click(2)
-	# close the mouse grid
-	user.grid_close()
+#midclick:
+#	mouse_click(2)
+#	# close the mouse grid
+#	user.grid_close()
 #see keys.py for modifiers.
 <user.modifiers> touch:
 	key("{modifiers}:down")
@@ -27,17 +27,17 @@ midclick:
 	key("{modifiers}:up")
 	# close the mouse grid
 	user.grid_close()
-<user.modifiers> righty:
-	key("{modifiers}:down")
-	mouse_click(1)
-	key("{modifiers}:up")
-	# close the mouse grid
-	user.grid_close()
-(dubclick | duke):
-	mouse_click()
-	mouse_click()
-	# close the mouse grid
-	user.grid_close()
+#<user.modifiers> righty:
+#	key("{modifiers}:down")
+#	mouse_click(1)
+#	key("{modifiers}:up")
+#	# close the mouse grid
+#	user.grid_close()
+#(dubclick | duke):
+#	mouse_click()
+#	mouse_click()
+#	# close the mouse grid
+#	user.grid_close()
 (tripclick | triplick):
 	mouse_click()
 	mouse_click()
