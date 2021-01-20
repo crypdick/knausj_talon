@@ -21,6 +21,13 @@ settings():
     #the amount to scroll up/down (equivalent to mouse wheel on Windows by default)
     user.mouse_wheel_down_amount = 3
 
+    # the number of lines of command history to display by default
+    user.command_history_display = 10
+    # the number of lines of command history to keep in total;
+    # "command history more" to display all of them, "command history less" to restore
+    user.command_history_size = 50
+
+
 # uncomment tag to enable mouse grid
 # tag(): user.mouse_grid_enabled
 
