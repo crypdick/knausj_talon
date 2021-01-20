@@ -180,7 +180,6 @@ symbol_key_words = {
     "equals": "=",
     "plus": "+",
     "tilde": "~",
-    "bang": "!",
     "dollar": "$",
     "down score": "_",
     "under score": "_",
